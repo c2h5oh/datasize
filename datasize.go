@@ -1,6 +1,7 @@
 package datasize
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -21,6 +22,8 @@ const (
 	maxUint64       uint64 = (1 << 64) - 1
 	cutoff          uint64 = maxUint64 / 10
 )
+
+var ErrBits = errors.New("unit with capital unit prefix and lower case unit (b) - bits, not bytes ")
 
 func (b ByteSize) Bytes() uint64 {
 	return uint64(b)
@@ -149,34 +152,39 @@ ParseLoop:
 
 	unit = strings.TrimSpace(string(t[i:]))
 	switch unit {
-	case "", "B", "b":
+	case "Kb", "Mb", "Gb", "Tb", "Pb", "Eb":
+		goto BitsError
+	}
+	unit = strings.ToLower(unit)
+	switch unit {
+	case "", "b", "byte":
 		// do nothing - already in bytes
 
-	case "K", "KB", "k", "kb", "kB":
+	case "k", "kb", "kilo", "kilobyte", "kilobytes":
 		if val > maxUint64/uint64(KB) {
 			goto Overflow
 		}
 		val *= uint64(KB)
 
-	case "M", "MB", "m", "mb", "mB":
+	case "m", "mb", "mega", "megabyte", "megabytes":
 		if val > maxUint64/uint64(MB) {
 			goto Overflow
 		}
 		val *= uint64(MB)
 
-	case "G", "GB", "g", "gb", "gB":
+	case "g", "gb", "giga", "gigabyte", "gigabytes":
 		if val > maxUint64/uint64(GB) {
 			goto Overflow
 		}
 		val *= uint64(GB)
 
-	case "T", "TB", "t", "tb", "tB":
+	case "t", "tb", "tera", "terabyte", "terabytes":
 		if val > maxUint64/uint64(TB) {
 			goto Overflow
 		}
 		val *= uint64(TB)
 
-	case "P", "PB", "p", "pb", "pB":
+	case "p", "pb", "peta", "petabyte", "petabytes":
 		if val > maxUint64/uint64(PB) {
 			goto Overflow
 		}
@@ -202,4 +210,8 @@ Overflow:
 SyntaxError:
 	*b = 0
 	return &strconv.NumError{fnUnmarshalText, string(t0), strconv.ErrSyntax}
+
+BitsError:
+	*b = 0
+	return &strconv.NumError{fnUnmarshalText, string(t0), ErrBits}
 }

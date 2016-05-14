@@ -27,10 +27,13 @@ Warning: see limitations at the end of this document about a possible precission
 
 ### Parsing strings
 `datasize.ByteSize` implements `TestUnmarshaler` interface and will automatically parse human readable strings into correct values where it is used:
-* `"10 MB` -> `10* datasize.MB`
+* `"10 MB"` -> `10* datasize.MB`
 * `"10240 g"` -> `10 * datasize.TB`
-* `2000` -> `2000 * datasize.B`
-* `1tB` -> `datasize.TB`
+* `"2000"` -> `2000 * datasize.B`
+* `"1tB"` -> `datasize.TB`
+* `"5 peta"` -> `5 * datasize.PB`
+* `"28 kilobytes"` -> `28 * datasize.KB`
+* `"1 gigabyte"` -> `1 * datasize.GB`
 
 You can also do it manually:
 ```go
