@@ -51,6 +51,12 @@ Use `%d` format string to get value in bytes without a unit
 ### JSON and other encoding
 Both `TextMarshaler` and `TextUnmarshaler` interfaces are implemented - JSON will just work. Other encoders will work provided they use those interfaces.
 
+### Human readable
+`ByteSize.HumanReadable()` or `ByteSize.HR()` returns a string with 1-3 digits, followed by 1 decimal place, a space and unit big enough to get 1-3 digits
+
+    * `(102400 * datasize.MB).String()` -> `"100.0 GB"`
+    * `(datasize.MB + 512 * datasize.KB).String()` -> `"1.5 MB"`
+
 ### Limitations
 * The underlying data type for `data.ByteSize` is `uint64`, so values outside of 0 to 2^64-1 range will overflow
 * size helper functions (like `ByteSize.Kilobytes()`) return `float64`, which can't represent all possible values of `uint64` accurately:
