@@ -27,27 +27,39 @@ func (b ByteSize) Bytes() uint64 {
 }
 
 func (b ByteSize) KBytes() float64 {
-	return float64(b) / float64(KB)
+	v := b / KB
+	r := b % KB
+	return float64(v) + float64(r)/float64(KB)
 }
 
 func (b ByteSize) MBytes() float64 {
-	return float64(b) / float64(MB)
+	v := b / MB
+	r := b % MB
+	return float64(v) + float64(r)/float64(MB)
 }
 
 func (b ByteSize) GBytes() float64 {
-	return float64(b) / float64(GB)
+	v := b / GB
+	r := b % GB
+	return float64(v) + float64(r)/float64(GB)
 }
 
 func (b ByteSize) TBytes() float64 {
-	return float64(b) / float64(TB)
+	v := b / TB
+	r := b % TB
+	return float64(v) + float64(r)/float64(TB)
 }
 
 func (b ByteSize) PBytes() float64 {
-	return float64(b) / float64(PB)
+	v := b / PB
+	r := b % PB
+	return float64(v) + float64(r)/float64(PB)
 }
 
 func (b ByteSize) EBytes() float64 {
-	return float64(b) / float64(EB)
+	v := b / EB
+	r := b % EB
+	return float64(v) + float64(r)/float64(EB)
 }
 
 func (b ByteSize) String() string {
