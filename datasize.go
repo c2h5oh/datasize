@@ -93,17 +93,17 @@ func (b ByteSize) HR() string {
 func (b ByteSize) HumanReadable() string {
 	switch {
 	case b > EB:
-		return fmt.Sprintf("%f.1 EB", b.EBytes())
+		return fmt.Sprintf("%.1f EB", b.EBytes())
 	case b > PB:
-		return fmt.Sprintf("%f.1 PB", b.PBytes())
+		return fmt.Sprintf("%.1f PB", b.PBytes())
 	case b > TB:
-		return fmt.Sprintf("%f.1 TB", b.TBytes())
+		return fmt.Sprintf("%.1f TB", b.TBytes())
 	case b > GB:
-		return fmt.Sprintf("%f.1 GB", b.GBytes())
+		return fmt.Sprintf("%.1f GB", b.GBytes())
 	case b > MB:
-		return fmt.Sprintf("%f.1 MB", b.MBytes())
+		return fmt.Sprintf("%.1f MB", b.MBytes())
 	case b > KB:
-		return fmt.Sprintf("%f.1 KB", b.KBytes())
+		return fmt.Sprintf("%.1f KB", b.KBytes())
 	default:
 		return fmt.Sprintf("%d B", b)
 	}
