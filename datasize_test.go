@@ -59,15 +59,63 @@ func TestUnmarshalText(t *testing.T) {
 	}
 
 	for _, tt := range table {
-		var s ByteSize
-		err := s.UnmarshalText([]byte(tt.in))
+		t.Run("UnmarshalText "+tt.in, func(t *testing.T) {
+			var s ByteSize
+			err := s.UnmarshalText([]byte(tt.in))
 
-		if (err != nil) != tt.err {
-			t.Errorf("UnmarshalText(%s) => %v, want no error", tt.in, err)
-		}
+			if (err != nil) != tt.err {
+				t.Errorf("UnmarshalText(%s) => %v, want no error", tt.in, err)
+			}
 
-		if s != tt.out {
-			t.Errorf("UnmarshalText(%s) => %d bytes, want %d bytes", tt.in, s, tt.out)
-		}
+			if s != tt.out {
+				t.Errorf("UnmarshalText(%s) => %d bytes, want %d bytes", tt.in, s, tt.out)
+			}
+		})
+		t.Run("Parse "+tt.in, func(t *testing.T) {
+			s, err := Parse([]byte(tt.in))
+
+			if (err != nil) != tt.err {
+				t.Errorf("Parse(%s) => %v, want no error", tt.in, err)
+			}
+
+			if s != tt.out {
+				t.Errorf("Parse(%s) => %d bytes, want %d bytes", tt.in, s, tt.out)
+			}
+		})
+		t.Run("MustParse "+tt.in, func(t *testing.T) {
+			defer func() {
+				if err := recover(); (err != nil) != tt.err {
+					t.Errorf("MustParse(%s) => %v, want no error", tt.in, err)
+				}
+			}()
+
+			s := MustParse([]byte(tt.in))
+			if s != tt.out {
+				t.Errorf("MustParse(%s) => %d bytes, want %d bytes", tt.in, s, tt.out)
+			}
+		})
+		t.Run("ParseString "+tt.in, func(t *testing.T) {
+			s, err := ParseString(tt.in)
+
+			if (err != nil) != tt.err {
+				t.Errorf("ParseString(%s) => %v, want no error", tt.in, err)
+			}
+
+			if s != tt.out {
+				t.Errorf("ParseString(%s) => %d bytes, want %d bytes", tt.in, s, tt.out)
+			}
+		})
+		t.Run("MustParseString "+tt.in, func(t *testing.T) {
+			defer func() {
+				if err := recover(); (err != nil) != tt.err {
+					t.Errorf("MustParseString(%s) => %v, want no error", tt.in, err)
+				}
+			}()
+
+			s := MustParseString(tt.in)
+			if s != tt.out {
+				t.Errorf("MustParseString(%s) => %d bytes, want %d bytes", tt.in, s, tt.out)
+			}
+		})
 	}
 }
