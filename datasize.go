@@ -190,7 +190,7 @@ ParseLoop:
 		}
 		val *= uint64(PB)
 
-	case "E", "EB", "eib", "e", "eb", "eB":
+	case "e", "eb", "eib", "exa", "exabyte", "exabytes":
 		if val > maxUint64/uint64(EB) {
 			goto Overflow
 		}
