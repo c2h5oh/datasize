@@ -237,3 +237,32 @@ func ParseString(s string) (ByteSize, error) {
 func MustParseString(s string) ByteSize {
 	return MustParse([]byte(s))
 }
+
+// ParseStringAs decodes given size with different base unit.
+// If a given size is a simple number (uint64) without a unit, then the given base unit is used,
+// otherwise the Parse function is used.
+func ParseStringAs(s string, base ByteSize) (ByteSize, error) {
+	if n, err := strconv.ParseUint(s, 10, 64); err == nil {
+		return ByteSize(n) * base, nil
+	}
+	return Parse([]byte(s))
+}
+
+func MustParseStringAs(s string, base ByteSize) ByteSize {
+	v, err := ParseStringAs(s, base)
+	if err != nil {
+		panic(err)
+	}
+	return v
+}
+
+// ParseAs decodes given size with different base unit.
+// If a given size is a simple number (uint64) without a unit, then the given base unit is used,
+// otherwise it behaves as Parse function.
+func ParseAs(t []byte, base ByteSize) (ByteSize, error) {
+	return ParseStringAs(string(t), base)
+}
+
+func MustParseAs(t []byte, base ByteSize) ByteSize {
+	return MustParseStringAs(string(t), base)
+}

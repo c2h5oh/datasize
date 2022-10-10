@@ -119,3 +119,63 @@ func TestUnmarshalText(t *testing.T) {
 		})
 	}
 }
+
+func TestParseAs(t *testing.T) {
+	for _, tt := range []ByteSize{B, KB, MB, GB, TB, PB, EB} {
+		name := tt.String()[1:]
+		value := "42"
+		expected := 42 * tt
+		t.Run(name, func(t *testing.T) {
+			t.Run("ParseAs", func(t *testing.T) {
+				s, err := ParseAs([]byte(value), tt)
+				t.Log(s)
+
+				if err != nil {
+					t.Errorf("ParseAs(42, %s)) => %v, want no error", name, err)
+				}
+
+				if s != expected {
+					t.Errorf("Parse(42, %s) => %d bytes, want %d bytes", name, s, 42*expected)
+				}
+			})
+			t.Run("MustParseAs", func(t *testing.T) {
+				defer func() {
+					if err := recover(); err != nil {
+						t.Errorf("ParseAs(42, %s)) => %v, want no error", name, err)
+					}
+				}()
+
+				s := MustParseAs([]byte(value), tt)
+				t.Log(s)
+				if s != expected {
+					t.Errorf("Parse(42, %s) => %d bytes, want %d bytes", name, s, 42*expected)
+				}
+			})
+			t.Run("ParseStringAs", func(t *testing.T) {
+				s, err := ParseStringAs(value, tt)
+				t.Log(s)
+
+				if err != nil {
+					t.Errorf("ParseAs(42, %s)) => %v, want no error", name, err)
+				}
+
+				if s != expected {
+					t.Errorf("Parse(42, %s) => %d bytes, want %d bytes", name, s, 42*expected)
+				}
+			})
+			t.Run("MustParseStringAs", func(t *testing.T) {
+				defer func() {
+					if err := recover(); err != nil {
+						t.Errorf("ParseAs(42, %s)) => %v, want no error", name, err)
+					}
+				}()
+
+				s := MustParseStringAs(value, tt)
+				t.Log(s)
+				if s != expected {
+					t.Errorf("Parse(42, %s) => %d bytes, want %d bytes", name, s, 42*expected)
+				}
+			})
+		})
+	}
+}
