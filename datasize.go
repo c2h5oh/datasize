@@ -160,37 +160,37 @@ ParseLoop:
 	case "", "b", "byte":
 		// do nothing - already in bytes
 
-	case "k", "kb", "kilo", "kilobyte", "kilobytes":
+	case "k", "kb", "kib", "kilo", "kilobyte", "kilobytes":
 		if val > maxUint64/uint64(KB) {
 			goto Overflow
 		}
 		val *= uint64(KB)
 
-	case "m", "mb", "mega", "megabyte", "megabytes":
+	case "m", "mb", "mib", "mega", "megabyte", "megabytes":
 		if val > maxUint64/uint64(MB) {
 			goto Overflow
 		}
 		val *= uint64(MB)
 
-	case "g", "gb", "giga", "gigabyte", "gigabytes":
+	case "g", "gb", "gib", "giga", "gigabyte", "gigabytes":
 		if val > maxUint64/uint64(GB) {
 			goto Overflow
 		}
 		val *= uint64(GB)
 
-	case "t", "tb", "tera", "terabyte", "terabytes":
+	case "t", "tb", "tib", "tera", "terabyte", "terabytes":
 		if val > maxUint64/uint64(TB) {
 			goto Overflow
 		}
 		val *= uint64(TB)
 
-	case "p", "pb", "peta", "petabyte", "petabytes":
+	case "p", "pb", "pib", "peta", "petabyte", "petabytes":
 		if val > maxUint64/uint64(PB) {
 			goto Overflow
 		}
 		val *= uint64(PB)
 
-	case "E", "EB", "e", "eb", "eB":
+	case "e", "eb", "eib", "exa", "exabyte", "exabytes":
 		if val > maxUint64/uint64(EB) {
 			goto Overflow
 		}
