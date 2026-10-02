@@ -119,3 +119,28 @@ func TestUnmarshalText(t *testing.T) {
 		})
 	}
 }
+
+func TestHumanReadable(t *testing.T) {
+	table := []struct {
+		in  ByteSize
+		out string
+	}{
+		{0, "0 B"},
+		{1, "1 B"},
+		{1023, "1023 B"},
+		{KB, "1.0 KB"},
+		{KB + 1, "1.0 KB"},
+		{MB, "1.0 MB"},
+		{MB + 512*KB, "1.5 MB"},
+		{GB, "1.0 GB"},
+		{TB, "1.0 TB"},
+		{PB, "1.0 PB"},
+		{EB, "1.0 EB"},
+		{102400 * MB, "100.0 GB"},
+	}
+	for _, tt := range table {
+		if got := tt.in.HumanReadable(); got != tt.out {
+			t.Errorf("HumanReadable(%d) => %s, want %s", tt.in, got, tt.out)
+		}
+	}
+}
